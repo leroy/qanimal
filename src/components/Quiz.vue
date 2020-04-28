@@ -1,8 +1,7 @@
 <template>
-	<div>
-		<img v-if="image" :src="image">
-
-		<input type="text" @keydown.enter="answer">
+	<div class="flex flex-col h-screen">
+		<input type="text" placeholder="typ je antwoord" class="text-xl border-4 border-transparent" :class="{'border-red-400': wrong}" @keydown.enter="answer">
+		<div v-if="image" class="w-full h-full bg-contain bg-no-repeat bg-center" :style="{'background-image': `url('${image}')`}"></div>
 	</div>
 </template>
 
@@ -14,7 +13,8 @@
 
 		data() {
 			return {
-				current: null
+				current: null,
+				wrong: false
 			}
 		},
 
@@ -36,7 +36,7 @@
 				if (!this.current) return null;
 
 				return this.questions[this.current];
-			}
+			},
 		},
 
 		methods: {
@@ -48,8 +48,14 @@
 			{
 				if (e.target.value === this.name) {
 					e.target.value = '';
+
 					this.nextQuestion();
+					this.wrong = false;
+					return;
 				}
+
+				e.target.value = '';
+				this.wrong = true;
 			}
 		}
 	}
